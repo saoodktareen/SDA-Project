@@ -1,3 +1,9 @@
 These are the required libraries for the project
+<<<<<<< HEAD
 pandas>=2.0
 openpyxl>=3.1
+=======
+Saood Khan Tareen
+shaheer Saikhani123
+for the love
+>>>>>>> 5a5286b82f4705c13ee217c6edc87370a67c7305
