@@ -1,5 +1,5 @@
 {
-  "region": "Asia",
+  "region": ["Europe", "Asia"],
   "year": 1960,
   "operation": "average",
   "output": "dashboard"
