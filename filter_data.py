@@ -9,7 +9,7 @@ def filter_data(df, config:dict):
         df = df[df["Year"] == config["year"]]
     return df
 
-df = load_data(r"C:\Users\LENOVOI\OneDrive\Desktop\SDA Project Phase 1\SDA-Project\gdp_with_continent_filled.csv")
+df = load_data("gdp_with_continent_filled.csv")
 cleaned_df = clean_data(df)
 
 
@@ -20,7 +20,7 @@ df_long = df.melt(
 )
 df_long["Year"] = df_long["Year"].astype(int)
 
-config = load_json(r"C:\Users\LENOVOI\OneDrive\Desktop\SDA Project Phase 1\SDA-Project\config.json")
+config = load_json("config.json")
 filtered = filter_data(df_long, config)
 print(filtered)
 print("Total Rows: ", len(filtered))
