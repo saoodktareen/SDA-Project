@@ -3,6 +3,7 @@ from cleaner import clean_data
 from load_json import load_json
 from filter_data import filter_data
 from Process import process   
+from visual import visualize
 
 def main():
         
@@ -21,7 +22,8 @@ def main():
     print(filtered)
     print("Total Rows: ", len(filtered))
 
-    process(filtered, config)  
+    result = process(filtered, config)  
+    visualize(filtered, config, result)
 
 if __name__ == "__main__":
     main()
