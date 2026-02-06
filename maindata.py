@@ -1,4 +1,10 @@
-numbers = [1,3,7,3,6,8];
-print("Sum of Numbers:", sum(numbers));
-print("Maximum Number:", max(numbers));
-print("Minimum Number:", min(numbers));
+from load_data import load_data
+from cleaner import clean_data
+
+def main():
+    df = load_data("gdp_with_continent_filled.csv")
+    cleaned_df = clean_data(df)
+    print(cleaned_df)
+
+if __name__ == "__main__":
+    main()
