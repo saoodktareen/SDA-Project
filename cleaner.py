@@ -22,7 +22,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     ).any(axis=1)
 
     if bad_text_rows.any():
-        print(" Text column error rows:", df.index[bad_text_rows].tolist())
+        print("❌ Text column error rows:", df.index[bad_text_rows].tolist())
 
     df = df[~bad_text_rows]
 
@@ -31,7 +31,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     ).any(axis=1)
 
     if bad_gdp_rows.any():
-        print(" GDP alphabet error rows:", df.index[bad_gdp_rows].tolist())
+        print("❌ GDP alphabet error rows:", df.index[bad_gdp_rows].tolist())
 
     df[gdp_cols] = (
         df[gdp_cols]
@@ -43,7 +43,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     empty_gdp_rows = (df[gdp_cols] == 0).all(axis=1)
 
     if empty_gdp_rows.any():
-        print(" Empty GDP rows:", df.index[empty_gdp_rows].tolist())
+        print("❌ Empty GDP rows:", df.index[empty_gdp_rows].tolist())
 
     df = df[~empty_gdp_rows]
 
@@ -56,7 +56,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     bad_continent_rows = ~df["Continent"].isin(valid_continents)
 
     if bad_continent_rows.any():
-        print(" Invalid continent rows:", df.index[bad_continent_rows].tolist())
+        print("❌ Invalid continent rows:", df.index[bad_continent_rows].tolist())
 
     df = df[~bad_continent_rows]
 
