@@ -1,17 +1,46 @@
-def process(df, config: dict):
-    gdp_series = df["GDP"]
+import pandas as pd
 
-    operations = {
-        "sum": lambda x: x.sum(),
-        "average": lambda x: x.sum() / len(x)
-    }
+def process(df: pd.DataFrame, config: dict):
+    operation = config.get("operation")
 
-    op = config.get("operation")
+    # -------------------------------
+    # CASE 1: REGION + YEAR DATA
+    # -------------------------------
+    if "region" in config:
+        grouped = df.groupby("Year")["GDP"]
 
-    if op not in operations:
-        raise ValueError("Invalid operation")
+        if operation == "sum":
+            result_df = grouped.sum().reset_index(name="GDP")
+            summary = result_df["GDP"].sum()
 
-    result = operations[op](gdp_series)
+        elif operation == "average":
+            result_df = grouped.mean().reset_index(name="GDP")
+            summary = result_df["GDP"].mean()
 
-    print(f"{op.capitalize()} GDP for year {config.get('year')}: {result}")
-    return result
+        print(f"{operation.capitalize()} GDP for region {config['region']}")
+        return {
+            "type": "region",
+            "data": result_df,
+            "summary": summary
+        }
+
+    # -------------------------------
+    # CASE 2: COUNTRY DATA
+    # -------------------------------
+    if "country" in config:
+        grouped = df.groupby("Country Name")["GDP"]
+
+        if operation == "sum":
+            result_df = grouped.sum().reset_index(name="GDP")
+            summary = result_df["GDP"].iloc[0]
+
+        elif operation == "average":
+            result_df = grouped.mean().reset_index(name="GDP")
+            summary = result_df["GDP"].iloc[0]
+
+        print(f"{operation.capitalize()} GDP for country {config['country']}")
+        return {
+            "type": "country",
+            "data": result_df,
+            "summary": summary
+        }
