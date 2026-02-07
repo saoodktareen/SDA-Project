@@ -1,46 +1,25 @@
 import pandas as pd
 
-def process(df: pd.DataFrame, config: dict):
-    operation = config.get("operation")
+def process(df: pd.DataFrame, config: dict, group_by: str) -> pd.DataFrame:
+    """
+    Aggregates GDP based on JSON operation (sum / average)
+    and groups by the specified column.
+    
+    Parameters:
+    df        : filtered DataFrame
+    config    : validated JSON config
+    group_by  : column to group by (e.g., 'Continent', 'Year')
+    """
 
-    # -------------------------------
-    # CASE 1: REGION + YEAR DATA
-    # -------------------------------
-    if "region" in config:
-        grouped = df.groupby("Year")["GDP"]
+    operation = config["operation"]
 
-        if operation == "sum":
-            result_df = grouped.sum().reset_index(name="GDP")
-            summary = result_df["GDP"].sum()
+    grouped = df.groupby(group_by)["GDP"]
 
-        elif operation == "average":
-            result_df = grouped.mean().reset_index(name="GDP")
-            summary = result_df["GDP"].mean()
+    if operation == "sum":
+        result_df = grouped.sum().reset_index(name="GDP")
+    elif operation == "average":
+        result_df = grouped.mean().reset_index(name="GDP")
+    else:
+        raise ValueError("Invalid operation in config")
 
-        print(f"{operation.capitalize()} GDP for region {config['region']}")
-        return {
-            "type": "region",
-            "data": result_df,
-            "summary": summary
-        }
-
-    # -------------------------------
-    # CASE 2: COUNTRY DATA
-    # -------------------------------
-    if "country" in config:
-        grouped = df.groupby("Country Name")["GDP"]
-
-        if operation == "sum":
-            result_df = grouped.sum().reset_index(name="GDP")
-            summary = result_df["GDP"].iloc[0]
-
-        elif operation == "average":
-            result_df = grouped.mean().reset_index(name="GDP")
-            summary = result_df["GDP"].iloc[0]
-
-        print(f"{operation.capitalize()} GDP for country {config['country']}")
-        return {
-            "type": "country",
-            "data": result_df,
-            "summary": summary
-        }
+    return result_df
