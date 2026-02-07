@@ -54,11 +54,19 @@ def visualize_countries(df, config):
 
         # ---------- HISTOGRAM ----------
         plt.figure(figsize=(8, 5))
-        plt.hist(gdp, bins=12, edgecolor="black")
-        plt.title(f"Annnual GDP Distribution of {country}")
-        plt.xlabel(f" GDP Value (x10¹²)")
+        plt.hist(
+            gdp,
+            bins=12,
+            color="#F59E0B",      # bar color
+            edgecolor="white",   # outline for visibility
+            alpha=0.9
+        )
+        plt.title(f"Annual GDP Distribution of {country}")
+        plt.xlabel("GDP Value (x10¹²)")
         plt.ylabel("Frequency")
         plt.tight_layout()
+
         mng = plt.get_current_fig_manager()
-        mng.window.state('zoomed')   # Windows
+        mng.window.state('zoomed')
         plt.show()
+
