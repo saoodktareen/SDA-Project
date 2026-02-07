@@ -59,23 +59,50 @@ def visualize_regions(df, config):
 
        # ---------- PIE ----------
         plt.figure(figsize=(7, 7))
+
+        dark_distinct_palette = [
+            "#1E3A8A",  # deep blue
+            "#7F1D1D",  # deep red
+            "#064E3B",  # deep green
+            "#4C1D95",  # deep purple
+            "#78350F",  # dark brown
+            "#0F172A",  # almost black navy
+            "#374151",  # charcoal grey
+            "#155E75",  # dark teal
+            "#713F12",  # dark gold-brown
+        ]
+
+        pie_colors = []
+        color_index = 0
+
+        for region in region_gdp["Continent"]:
+            if region in focus_regions:
+                pie_colors.append("#F59E0B")  # amber highlight
+            else:
+                pie_colors.append(
+                    dark_distinct_palette[color_index % len(dark_distinct_palette)]
+                )
+                color_index += 1
+
         wedges, texts, autotexts = plt.pie(
             region_gdp["GDP"],
             labels=region_gdp["Continent"],
             autopct="%1.1f%%",
-            colors=colors,
+            colors=pie_colors,
             startangle=140
         )
 
+        # Highlight focus labels
         for text in texts:
             if text.get_text() in focus_regions:
-                text.set_color("#FFD700")
+                text.set_color("#FBBF24")  # gold
                 text.set_fontweight("bold")
                 text.set_fontsize(12)
             else:
                 text.set_color("white")
 
         plt.title(f"{operation.capitalize()} GDP Share by Region ({year})")
+
         mng = plt.get_current_fig_manager()
         mng.window.state('zoomed')
         plt.show()
