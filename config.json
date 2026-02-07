@@ -1,7 +1,7 @@
 {
-  "region": ["Asia", "Africa", "Europe"],
-  "year": [2020],
-  "country": ["Pakistan", "Zimbabwe"],
+  "region": ["Asia", "North America"],
+  "year": [1960],
+  "country": ["Pakistan"],
   "operation": "sum",
   "output": "dashboard"
 }
