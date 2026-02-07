@@ -1,55 +1,46 @@
 import matplotlib.pyplot as plt
 
 def visualize_countries(df, config):
-    countries = config.get("country", [])
+    countries = config["country"]
+    operation = config["operation"].capitalize()
 
     for country in countries:
-        country_df = df[df["Country Name"] == country].sort_values("Year")
+        country_df = df[df["Country Name"] == country]
 
-        years = country_df["Year"]
-        gdp = country_df["GDP"]
-
-        # ---------------- LINE GRAPH ----------------
-        plt.figure(figsize=(9, 5))
-        plt.plot(
-            years,
-            gdp,
-            marker="o",
-            color="#1f77b4",   # blue
-            linewidth=2
+        yearly_gdp = (
+            country_df
+            .groupby("Year")["GDP"]
+            .agg("sum" if config["operation"] == "sum" else "mean")
+            .reset_index()
         )
-        plt.title(f"GDP Trend of {country}")
+
+        years = yearly_gdp["Year"]
+        gdp = yearly_gdp["GDP"]
+
+        # ---------- LINE ----------
+        plt.figure(figsize=(9, 5))
+        plt.plot(years, gdp, marker="o")
+        plt.title(f"{operation} GDP Trend of {country}")
         plt.xlabel("Year")
-        plt.ylabel("GDP")
-        plt.grid(True, alpha=0.3)
+        plt.ylabel(f"{operation} GDP")
+        plt.grid(True)
         plt.tight_layout()
         plt.show()
 
-        # ---------------- SCATTER PLOT ----------------
+        # ---------- SCATTER ----------
         plt.figure(figsize=(9, 5))
-        plt.scatter(
-            years,
-            gdp,
-            color="#2ca02c",  # green
-            alpha=0.7
-        )
-        plt.title(f"GDP Scatter Plot of {country}")
+        plt.scatter(years, gdp)
+        plt.title(f"{operation} GDP Scatter Plot of {country}")
         plt.xlabel("Year")
-        plt.ylabel("GDP")
+        plt.ylabel(f"{operation} GDP")
         plt.tight_layout()
         plt.show()
 
-        # ---------------- HISTOGRAM ----------------
+        # ---------- HISTOGRAM ----------
         plt.figure(figsize=(8, 5))
-        plt.hist(
-            gdp,
-            bins=12,
-            color="#ff7f0e",   # orange
-            edgecolor="black",
-            alpha=0.75
-        )
-        plt.title(f"GDP Distribution of {country}")
-        plt.xlabel("GDP")
+        plt.hist(gdp, bins=12, edgecolor="black")
+        plt.title(f"{operation} GDP Distribution of {country}")
+        plt.xlabel(f"{operation} GDP")
         plt.ylabel("Frequency")
         plt.tight_layout()
         plt.show()
