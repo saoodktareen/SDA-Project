@@ -1,7 +1,7 @@
 {
-  "region": ["Asia", "Oceania", "Europe"],
+  "region": ["Asia", "Africa", "Europe"],
   "year": [2020],
-  "country": ["India", "Pakistan"],
+  "country": ["Pakistan", "Zimbabwe"],
   "operation": "sum",
   "output": "dashboard"
 }
