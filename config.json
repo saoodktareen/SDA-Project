@@ -1,7 +1,7 @@
 {
-  "region": ["Asia"],
-  "year": 1960,
-  "country": "Pakistan",
+  "region": ["Asia", "Europe"],
+  "year": [1960, 2021],
+  "country": ["Pakistan", "India"],
   "operation": "average",
   "output": "dashboard"
 }
