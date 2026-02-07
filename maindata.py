@@ -9,19 +9,7 @@ def main():
     df = load_data("gdp_with_continent_filled.csv")
     cleaned_df = clean_data(df)
 
-    df_long = df.melt(
-        id_vars=["Country Name", "Country Code", "Indicator Name", "Indicator Code", "Continent"],
-        var_name="Year",
-        value_name="GDP"
-    )
-    df_long["Year"] = df_long["Year"].astype(int)
-
-    config = load_json("config.json")
-    filtered = filter_data(df_long, config)
-    print(filtered)
-    print("Total Rows: ", len(filtered))
-
-    process(filtered, config)  
+    print(cleaned_df)
 
 if __name__ == "__main__":
     main()
