@@ -7,10 +7,10 @@ from Process import process
 from visual import visualize
 
 def main():
-    df = load_data("Test_File.csv")
+    df = load_data("gdp_with_continent_filled.csv")
     cleaned_df = clean_data(df)
 
-    df_long = df.melt(
+    df_long = cleaned_df.melt(
         id_vars=["Country Name", "Country Code", "Indicator Name", "Indicator Code", "Continent"],
         var_name="Year",
         value_name="GDP"
