@@ -6,7 +6,6 @@ from itertools import cycle
 from matplotlib.widgets import Button
 
 # ==================== PROFESSIONAL COLOR SCHEME ====================
-# Sophisticated, business-friendly palette inspired by modern dashboards
 PROFESSIONAL_PALETTE = [
     "#3B82F6",  # Professional Blue
     "#10B981",  # Success Green
