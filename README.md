@@ -3,7 +3,7 @@ This Software Design and Analysis Project is a Python-based data analysis and vi
 
 ## Project Objectives
 - Load, Clean and FIlter GDP Data according to JSON file
-- Transform GDP csv file data into analysis-prepared data
+- Transform GDP CSV file data into analysis-prepared data
 - Apply statistical operations according to user preferences
 - Visualize GDP Trends
     * Region-wise Representation (Bar Graph, Pie Chart, Heatmap)
@@ -29,3 +29,10 @@ SDA-Project/
 ├── requirements.txt
 └── README.md
 ```
+## Data Processing Workflow
+### 1. Load Data
+    - GDP is loaded from a CSV file 
+### 2. Clean Data
+    - Handles missing GDP values
+    - Ensures numeric consistency
+    - Prevents 
