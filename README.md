@@ -10,7 +10,10 @@ This Software Design and Analysis Project is a Python-based data analysis and vi
     * Country-wise Representation (Line Plot, Scatter Plot, Histogram)
 - Control execution using a validated JSON configuration file
 
-# Project Structure
+## Project Structure
+## 📁 Project Structure
+
+```text
 SDA-Project/
 │
 ├── maindata.py
@@ -27,4 +30,4 @@ SDA-Project/
 ├── config.json
 ├── requirements.txt
 └── README.md
-ef
+```
