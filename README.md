@@ -1,4 +1,4 @@
-# GDP Analysis and Visualization Dashboard
+# **GDP Analysis and Visualization Dashboard**
 This Software Design and Analysis Project is a Python-based data analysis and visualization system that processes World Bank GDP Data and generates multiple data representation visuals for both region-wise and country-wise data selection. The entire workflow is derived from a JSON configuration file which makes the system flexible and reusable.
 
 ## Project Objectives
@@ -66,21 +66,21 @@ Generated for each specified country:
 - *Scatter Plot* ~ GDP Trend across all years
 These diagrams show year-wise GDP trends with different colour representations for different countries
 
-### Terminal Output
+## Terminal Output
 - The selected operation results are printed on the terminal
 - Aggregated GDP values are displayed for:
     * Each selected region (for each specified year)
     * Each selected country (for all years)
 - Output Headings are self explanatory according to JSON file input
 
-### Dependencies
+## Dependencies
 - All required libraries are listed in the file named requirements.txt
 - They can be installed using:
     ```text
     pip install -r requirements.txt
     ```
 
-### Running The Project
+## Running The Project
 ```text
 python main.py
 ```
@@ -88,18 +88,18 @@ python main.py
     * config.json values are valid
     * Required CSV file is present in the same directory
 
-### Key Design Principles
+## Key Design Principles
 - Minimal function argument changes
 - Clear seperation of concerns (loading, processing, visualization)
 - JSON-driven logic
 - Beginner-friendly, Functional, and Modular design
 
-### Notes 
+## Notes 
 - Visualizations appear sequentially due to Matplotlib behaviour
 - This project is designed for academic evaluation and clarity, not performance optimization
 
-### Authors
-- *Shaheer Saikhani* BCS-4A 24L-3030
-- *Saood Khan Tareen* BCS-4A 24L-0838
+## Authors
+- **Shaheer Saikhani** *BCS-4A* 24L-3030
+- **Saood Khan Tareen** *BCS-4A* 24L-0838
 
 - The structure of this project completely supports Phase 2 extensions and dashboard upgradation
