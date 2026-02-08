@@ -1,8 +1,4 @@
 import matplotlib.pyplot as plt
-<<<<<<< HEAD
-import numpy as np
-from matplotlib.widgets import Button
-=======
 import seaborn as sns
 import numpy as np
 from functools import reduce
@@ -314,7 +310,6 @@ def create_scatter_with_trend(country_data):
     plt.show()
 
 # ==================== MAIN VISUALIZATION FUNCTION ====================
->>>>>>> origin/Saood
 
 # ==================== COLORS ====================
 COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444", "#06B6D4", "#EC4899", "#14B8A6"]
