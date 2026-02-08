@@ -13,19 +13,17 @@ This Software Design and Analysis Project is a Python-based data analysis and vi
 # Project Structure
 SDA-Project/
 │
-├── maindata.py # Main entry point of the project
-├── load_data.py # Loads GDP CSV data
-├── cleaner.py # Cleans and validates raw data
-├── transform.py # Converts data to long format
-├── load_json.py # Loads JSON configuration
-├── validate_json.py # Validates JSON keys & values
-├── filter_by_region.py # Filters data for selected regions
-├── filter_by_country.py # Filters data for selected countries
-├── Process.py # Handles GDP aggregation logic
-│
-├── visualize_regions.py # Region-wise visualizations
-├── visualize_countries.py # Country-wise visualizations
-│
-├── config.json # User-defined configuration file
-├── requirements.txt # Required Python libraries
-└── README.md # Project documentation
+├── maindata.py
+├── load_data.py
+├── cleaner.py
+├── transform.py
+├── load_json.py
+├── validate_json.py
+├── filter_by_region.py
+├── filter_by_country.py
+├── Process.py
+├── visualize_regions.py
+├── visualize_countries.py
+├── config.json
+├── requirements.txt
+└── README.md
