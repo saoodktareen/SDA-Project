@@ -1,221 +1,328 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-<<<<<<< HEAD
-from Process import process
-from matplotlib.widgets import Button
-=======
+import numpy as np
 from process import process
->>>>>>> origin/Saood
+from functools import reduce
+from matplotlib.widgets import Button
 
-# ==================== COLORS ====================
-COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444", "#06B6D4", "#EC4899", "#14B8A6"]
-DARK_COLORS = ["#1E3A8A", "#7F1D1D", "#064E3B", "#4C1D95", "#78350F", "#0F172A", "#374151", "#155E75"]
+# ==================== PROFESSIONAL COLOR SCHEME ====================
+PROFESSIONAL_PALETTE = [
+    "#3B82F6",  # Professional Blue
+    "#10B981",  # Success Green
+    "#F59E0B",  # Warm Amber
+    "#8B5CF6",  # Royal Purple
+    "#EF4444",  # Confident Red
+    "#06B6D4",  # Modern Cyan
+    "#EC4899",  # Vibrant Pink
+    "#14B8A6",  # Teal
+]
 
-# ==================== SETUP ====================
-def setup_style():
-    """Setup plot style"""
+HIGHLIGHT_COLOR = "#F59E0B"  # Amber for focus regions
+
+def configure_plot_style():
+    """Configure professional matplotlib styling."""
     plt.style.use("dark_background")
-    plt.rcParams["font.size"] = 10
-    plt.rcParams["figure.facecolor"] = "#1a1a1a"
-    plt.rcParams["axes.facecolor"] = "#262626"
+    plt.rcParams.update({
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "font.size": 12,
+        "axes.titlesize": 20,
+        "axes.titleweight": "bold",
+        "axes.labelsize": 14,
+        "axes.labelweight": "bold",
+        "axes.edgecolor": "#555555",
+        "axes.linewidth": 1.5,
+        "axes.grid": True,
+        "grid.alpha": 0.3,
+        "grid.linestyle": "--",
+        "grid.color": "#555555",
+        "figure.facecolor": "#1a1a1a",
+        "axes.facecolor": "#262626",
+        "legend.fontsize": 11,
+        "legend.framealpha": 0.9,
+        "xtick.labelsize": 11,
+        "ytick.labelsize": 11,
+        "figure.autolayout": False,
+    })
 
-# ==================== HELPER FUNCTIONS ====================
-def get_bar_color(region, focus_regions):
-    """Get color for a region - highlight if in focus"""
-    if region in focus_regions:
-        return "#F59E0B"  # Highlight color (orange)
-    else:
-        return "#3B82F6"  # Normal color (blue)
+def maximize_window():
+    """Maximize the plot window if possible."""
+    try:
+        manager = plt.get_current_fig_manager()
+        manager.window.state('zoomed')
+    except:
+        try:
+            manager.window.showMaximized()
+        except:
+            pass
 
-# ==================== CHART DRAWING FUNCTIONS ====================
-def draw_bar_chart(ax, region_gdp, focus_regions, operation, year):
-    """Draw bar chart"""
-    ax.clear()
+def create_bar_chart(region_gdp, focus_regions, year, operation):
+    """Create professional bar chart for regions."""
+    fig, ax = plt.subplots(figsize=(14, 8))
     
-    regions = region_gdp["Continent"].tolist()
-    gdp_values = region_gdp["GDP"].tolist()
-    
-    # Get colors for each region
-    colors = list(map(lambda r: get_bar_color(r, focus_regions), regions))
+    # Assign colors using functional style
+    colors = list(
+        map(
+            lambda item: HIGHLIGHT_COLOR if item[1] in focus_regions 
+            else PROFESSIONAL_PALETTE[item[0] % len(PROFESSIONAL_PALETTE)],
+            enumerate(region_gdp["Continent"])
+        )
+    )
     
     # Create bars
-    bars = ax.bar(regions, gdp_values, color=colors, edgecolor="white",
-                 linewidth=1.2, alpha=0.85, width=0.7)
+    bars = ax.bar(
+        region_gdp["Continent"],
+        region_gdp["GDP"],
+        color=colors,
+        edgecolor="white",
+        linewidth=1.5,
+        alpha=0.85,
+        width=0.65
+    )
     
-    # Add value labels
-    for bar in bars:
-        height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2, height, f'${height:.2f}T',
-               ha='center', va='bottom', fontsize=9, fontweight='bold')
+    # Add value labels on top of bars using map
+    list(
+        map(
+            lambda bar: ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height(),
+                f'${bar.get_height():.2f}T',
+                ha='center',
+                va='bottom',
+                fontsize=11,
+                fontweight='bold',
+                color='white'
+            ),
+            bars
+        )
+    )
     
     # Styling
-    title = f"{operation.capitalize()} GDP by Region ({year})"
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=10)
-    ax.set_xlabel("Region", fontsize=11, fontweight="bold")
-    ax.set_ylabel(f"{operation.capitalize()} GDP (Trillions USD)", fontsize=11, fontweight="bold")
+    ax.set_title(
+        f"{operation.capitalize()} GDP by Region ({year})",
+        fontsize=22,
+        fontweight="bold",
+        pad=20,
+        color="#FFFFFF"
+    )
+    ax.set_xlabel("Region", fontsize=14, fontweight="bold", labelpad=10)
+    ax.set_ylabel(f"{operation.capitalize()} GDP (Trillions USD)", fontsize=14, fontweight="bold", labelpad=10)
     
-    # Highlight focus region labels
-    for label in ax.get_xticklabels():
-        if label.get_text() in focus_regions:
-            label.set_color("#FFD700")
-            label.set_fontweight("bold")
-            label.set_fontsize(10)
-        else:
-            label.set_color("white")
+    # Highlight focus region labels using map
+    list(
+        map(
+            lambda label: (
+                label.set_color(HIGHLIGHT_COLOR),
+                label.set_fontweight("bold"),
+                label.set_fontsize(13)
+            ) if label.get_text() in focus_regions else (
+                label.set_color("white"),
+            ),
+            ax.get_xticklabels()
+        )
+    )
     
-    plt.setp(ax.get_xticklabels(), rotation=45, ha='right')
-    ax.grid(axis='y', alpha=0.3, linestyle="--")
+    plt.xticks(rotation=45, ha='right')
+    ax.grid(axis='y', alpha=0.3, linestyle="--", linewidth=0.8)
+    
+    # Extra space at bottom and proper layout
+    plt.subplots_adjust(left=0.1, right=0.95, top=0.92, bottom=0.18)
+    
+    # Add Next button
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
+    btn.label.set_fontweight('bold')
+    btn.on_clicked(lambda event: plt.close())
+    
+    maximize_window()
+    plt.show()
 
-def draw_pie_chart(ax, region_gdp, focus_regions, operation, year):
-    """Draw pie chart"""
-    ax.clear()
+def create_pie_chart(region_gdp, focus_regions, year, operation):
+    """Create professional pie chart for regions."""
+    fig, ax = plt.subplots(figsize=(12, 10))
     
-    regions = region_gdp["Continent"].tolist()
-    gdp_values = region_gdp["GDP"].tolist()
+    # Assign colors using functional style with stateful closure
+    def create_color_mapper():
+        state = {"color_index": 0}
+        
+        def get_color(region):
+            if region in focus_regions:
+                return HIGHLIGHT_COLOR
+            else:
+                color = PROFESSIONAL_PALETTE[state["color_index"] % len(PROFESSIONAL_PALETTE)]
+                state["color_index"] += 1
+                return color
+        
+        return get_color
     
-    # Get colors for pie slices
-    pie_colors = []
-    dark_index = 0
-    for region in regions:
-        if region in focus_regions:
-            pie_colors.append("#F59E0B")
-        else:
-            pie_colors.append(DARK_COLORS[dark_index % len(DARK_COLORS)])
-            dark_index += 1
+    pie_colors = list(map(create_color_mapper(), region_gdp["Continent"]))
     
-    # Explode focus regions
-    explode = [0.05 if r in focus_regions else 0 for r in regions]
+    # Create pie chart WITHOUT explode (no protrusion)
+    wedges, texts, autotexts = ax.pie(
+        region_gdp["GDP"],
+        labels=region_gdp["Continent"],
+        autopct='%1.1f%%',
+        colors=pie_colors,
+        startangle=140,
+        shadow=True,
+        textprops={'fontsize': 12, 'fontweight': 'bold'}
+    )
     
-    # Create pie chart
-    wedges, texts, autotexts = ax.pie(gdp_values, labels=regions, autopct="%1.1f%%",
-                                        colors=pie_colors, startangle=90,
-                                        explode=explode, shadow=True,
-                                        textprops={'fontsize': 10, 'fontweight': 'bold'})
+    # Highlight focus labels using map
+    list(
+        map(
+            lambda text: (
+                text.set_color(HIGHLIGHT_COLOR),
+                text.set_fontweight("bold"),
+                text.set_fontsize(14)
+            ) if text.get_text() in focus_regions else (
+                text.set_color("white"),
+                text.set_fontsize(12)
+            ),
+            texts
+        )
+    )
     
-    # Highlight focus region labels
-    for text in texts:
-        if text.get_text() in focus_regions:
-            text.set_color("#FFD700")
-            text.set_fontweight("bold")
-            text.set_fontsize(11)
-        else:
-            text.set_color("white")
-            text.set_fontsize(10)
+    # Style percentage text using map
+    list(
+        map(
+            lambda autotext: (
+                autotext.set_color('white'),
+                autotext.set_fontweight('bold'),
+                autotext.set_fontsize(11)
+            ),
+            autotexts
+        )
+    )
     
-    # Make percentage text bold
-    for autotext in autotexts:
-        autotext.set_fontsize(10)
-        autotext.set_fontweight('bold')
-        autotext.set_color('white')
+    ax.set_title(
+        f"{operation.capitalize()} GDP Share by Region ({year})",
+        fontsize=22,
+        fontweight="bold",
+        pad=15,
+        color="#FFFFFF",
+        y=0.98
+    )
     
-    title = f"{operation.capitalize()} GDP Share by Region ({year})"
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=10)
+    # Proper spacing for pie chart with more top margin
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.88, bottom=0.05)
+    
+    # Add Next button
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
+    btn.label.set_fontweight('bold')
+    btn.on_clicked(lambda event: plt.close())
+    
+    maximize_window()
+    plt.show()
 
-def draw_heatmap(ax, region_gdp, focus_regions, operation, year):
-    """Draw heatmap"""
-    ax.clear()
+def create_heatmap(region_gdp, focus_regions, year, operation):
+    """Create professional heatmap for regions."""
+    fig, ax = plt.subplots(figsize=(10, 8))
     
     # Create heatmap
-    sns.heatmap(region_gdp.set_index("Continent"), annot=True, fmt=".2f",
-                cmap="YlOrRd", cbar_kws={'label': 'GDP (Trillions USD)'},
-                linewidths=1.2, linecolor='white', ax=ax, 
-                annot_kws={'fontsize': 10, 'fontweight': 'bold'})
+    sns.heatmap(
+        region_gdp.set_index("Continent"),
+        annot=True,
+        fmt=".2f",
+        cmap="rocket_r",
+        cbar_kws={'label': 'GDP (Trillions USD)'},
+        linewidths=2,
+        linecolor='#1a1a1a',
+        ax=ax,
+        annot_kws={'fontsize': 12, 'fontweight': 'bold'}
+    )
     
-    # Highlight focus region labels
-    for label in ax.get_yticklabels():
-        if label.get_text() in focus_regions:
-            label.set_color("#FFD700")
-            label.set_fontweight("bold")
-            label.set_fontsize(11)
-        else:
-            label.set_color("white")
-            label.set_fontsize(10)
+    # Highlight focus region labels using map
+    list(
+        map(
+            lambda label: (
+                label.set_color(HIGHLIGHT_COLOR),
+                label.set_fontweight("bold"),
+                label.set_fontsize(14)
+            ) if label.get_text() in focus_regions else (
+                label.set_color("white"),
+                label.set_fontsize(12)
+            ),
+            ax.get_yticklabels()
+        )
+    )
     
-    title = f"{operation.capitalize()} GDP Heatmap ({year})"
-    ax.set_title(title, fontsize=16, fontweight="bold", pad=10)
-    ax.set_xlabel("GDP Value", fontsize=11, fontweight="bold")
-    ax.set_ylabel("Region", fontsize=11, fontweight="bold")
+    ax.set_title(
+        f"{operation.capitalize()} GDP Heatmap ({year})",
+        fontsize=22,
+        fontweight="bold",
+        pad=20,
+        color="#FFFFFF"
+    )
+    ax.set_xlabel("GDP Value", fontsize=14, fontweight="bold", labelpad=10)
+    ax.set_ylabel("Region", fontsize=14, fontweight="bold", labelpad=10)
     
     # Style colorbar
     cbar = ax.collections[0].colorbar
-    cbar.ax.tick_params(labelsize=9)
-
-# ==================== PROCESS ONE YEAR ====================
-def process_one_year(df, year, focus_regions, operation, config):
-    """Process and visualize one year of data"""
-    # Filter data for this year
-    year_df = df[df["Year"] == year]
+    cbar.ax.tick_params(labelsize=11, colors='white')
+    cbar.set_label('GDP (Trillions USD)', fontsize=12, fontweight='bold', color='white')
     
-    # Process regional data
-    region_gdp = process(year_df, config, "Continent")
-    region_gdp = region_gdp.sort_values("GDP", ascending=False)
-    
-    # Print stats
-    print(f"\n{'Year: ' + str(year):^60}")
-    print("-" * 60)
-    
-    if operation == "sum":
-        for _, row in region_gdp.iterrows():
-            if row['Continent'] in focus_regions:
-                print(f"  {row['Continent']:>20} → Total GDP: ${row['GDP']:,.2f}T")
-    elif operation == "average":
-        avg = region_gdp["GDP"].mean()
-        print(f"  Average GDP across all regions: ${avg:,.2f}T")
-    
-    print(f"\n✨ Showing visualizations for {year} - Use Next button to navigate\n")
-    
-    # Create figure with consistent size
-    fig, ax = plt.subplots(figsize=(10, 6))
-    plt.subplots_adjust(bottom=0.15)
-    
-    # Chart list
-    charts = [
-        lambda: draw_bar_chart(ax, region_gdp, focus_regions, operation, year),
-        lambda: draw_pie_chart(ax, region_gdp, focus_regions, operation, year),
-        lambda: draw_heatmap(ax, region_gdp, focus_regions, operation, year)
-    ]
-    
-    # State
-    state = {'current': 0}
-    
-    def next_chart(event):
-        """Show next chart"""
-        state['current'] = (state['current'] + 1) % len(charts)
-        charts[state['current']]()
-        counter_text.set_text(f"Chart {state['current'] + 1} of {len(charts)}")
-        plt.draw()
-    
-    # Draw first chart
-    charts[0]()
+    plt.subplots_adjust(left=0.15, right=0.95, top=0.92, bottom=0.1)
     
     # Add Next button
-    button_ax = plt.axes([0.44, 0.02, 0.12, 0.06])
-    btn = Button(button_ax, 'Next →', color='#10B981', hovercolor='#059669')
-    btn.label.set_color('white')
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
     btn.label.set_fontweight('bold')
-    btn.label.set_fontsize(11)
-    btn.on_clicked(next_chart)
+    btn.on_clicked(lambda event: plt.close())
     
-    # Add counter text
-    counter_text = fig.text(0.5, 0.01, f'Chart 1 of {len(charts)}',
-                           ha='center', fontsize=10, color='#AAAAAA', fontweight='bold')
-    
+    maximize_window()
     plt.show()
 
-# ==================== MAIN FUNCTION ====================
 def visualize_regions(df, config):
-    """Main function - visualize regional GDP data"""
-    setup_style()
+    """
+    Main visualization function for regions with professional styling.
+    Uses pure functional programming style.
+    """
+    # Configure styling
+    configure_plot_style()
     
     years = config["year"]
     focus_regions = config["region"]
     operation = config["operation"]
-    
+
     print("\n" + "="*60)
-    print("🌍 REGION GDP ANALYSIS".center(60))
+    print("📊 REGION GDP ANALYSIS".center(60))
     print("="*60)
+
+    # Process each year using map (functional style)
+    def process_year(year):
+        year_df = df[df["Year"] == year]
+        region_gdp = process(year_df, config, "Continent").sort_values("GDP", ascending=False)
+        
+        # Terminal output
+        print(f"\n{'Year: ' + str(year):^60}")
+        print("-" * 60)
+        
+        # Conditional output based on operation (functional style)
+        if operation == "sum":
+            list(
+                map(
+                    lambda row: print(f"  {row[1]['Continent']:>20} → Total GDP: ${row[1]['GDP']:.2f}T"),
+                    filter(
+                        lambda row: row[1]["Continent"] in focus_regions,
+                        region_gdp.iterrows()
+                    )
+                )
+            )
+        elif operation == "average":
+            print(f"  {'Average GDP across all regions:':<40} ${region_gdp['GDP'].mean():.2f}T")
+        
+        print("-" * 60)
+        
+        # Create visualizations
+        create_bar_chart(region_gdp, focus_regions, year, operation)
+        create_pie_chart(region_gdp, focus_regions, year, operation)
+        create_heatmap(region_gdp, focus_regions, year, operation)
     
-    # Process each year
-    for year in years:
-        process_one_year(df, year, focus_regions, operation, config)
-    
+    list(map(process_year, years))
+
+    print("\n" + "="*60 + "\n")

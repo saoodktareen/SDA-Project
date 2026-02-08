@@ -1,88 +1,90 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 
-# ==================== SETUP ====================
-def setup_style():
-    """Setup plot style"""
+# ---------- HELPER FUNCTIONS ----------
+
+def set_modern_style():
+    """Apply modern, professional styling matching other diagrams."""
     plt.style.use("dark_background")
-    plt.rcParams["font.size"] = 11
-    plt.rcParams["figure.facecolor"] = "#1a1a1a"
+    plt.rcParams.update({
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "font.size": 18,
+        "axes.labelweight": "bold",
+        "axes.titleweight": "bold",
+        "axes.edgecolor": "#555555",
+        "axes.linewidth": 2,
+        "figure.facecolor": "#1a1a1a",
+        "axes.facecolor": "#262626",
+        "figure.autolayout": False
+    })
 
-# ==================== JSON ERRORS ====================
-def show_json_errors(json_errors):
-    """Show JSON configuration errors"""
-    setup_style()
-    
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.axis('off')
-    
-    # Create error message
-    error_text = "\n".join(json_errors)
-    
-    # Title
-    ax.text(0.5, 0.75, "🚨 JSON CONFIGURATION ERROR",
-            ha="center", va="center", fontsize=22, fontweight="bold",
-            color="#EF4444", transform=ax.transAxes)
-    
-    # Error message
-    ax.text(0.5, 0.45, error_text,
-            ha="center", va="center", fontsize=13,
-            color="#FFFFFF", transform=ax.transAxes,
-            bbox=dict(facecolor="#2a2a2a", edgecolor="#EF4444",
-                     boxstyle="round,pad=1.5", linewidth=3))
-    
-    # Close button
-    ax_button = plt.axes([0.44, 0.08, 0.12, 0.08])
-    btn = Button(ax_button, 'Close', color='#EF4444', hovercolor='#DC2626')
-    btn.label.set_color('white')
-    btn.label.set_fontweight('bold')
-    btn.label.set_fontsize(11)
-    btn.on_clicked(lambda event: plt.close('all'))
-    
-    plt.tight_layout()
-    plt.show()
+def format_json_errors(json_errors):
+    msg = "🚨 JSON ERRORS FOUND 🚨\n\n"
+    for i, err in enumerate(json_errors, 1):
+        msg += f"{err}\n"
+    return msg
 
-# ==================== CSV ERRORS ====================
-def show_csv_errors(csv_errors):
-    """Show CSV data errors"""
-    setup_style()
-    
-    # Filter only errors that have data
-    error_list = []
+def format_csv_errors(csv_errors):
+    msg = "⚠ CSV DATA ERRORS ⚠\n\n"
+    has_error = False
     for error_type, rows in csv_errors.items():
         if rows:
-            clean_name = error_type.replace('_', ' ').title()
-            error_list.append(f"{clean_name}: {len(rows)} rows")
-    
-    if not error_list:
-        return
-    
-    error_text = "\n\n".join(error_list)
-    
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.axis('off')
-    
-    # Title
-    ax.text(0.5, 0.72, "⚠️ CSV DATA ERRORS",
-            ha="center", va="center", fontsize=22, fontweight="bold",
-            color="#06B6D4", transform=ax.transAxes)
-    
-    # Error message
-    ax.text(0.5, 0.45, error_text,
-            ha="center", va="center", fontsize=14,
-            color="#FFFFFF", transform=ax.transAxes,
-            bbox=dict(facecolor="#2a2a2a", edgecolor="#06B6D4",
-                     boxstyle="round,pad=1.5", linewidth=3))
-    
-    # Close button
-    ax_button = plt.axes([0.44, 0.08, 0.12, 0.08])
-    btn = Button(ax_button, 'Close', color='#06B6D4', hovercolor='#0891B2')
-    btn.label.set_color('white')
-    btn.label.set_fontweight('bold')
-    btn.label.set_fontsize(11)
-    btn.on_clicked(lambda event: plt.close('all'))
-    
-    plt.tight_layout()
+            has_error = True
+            nice_name = error_type.replace("_", " ").title()
+            msg += f"{nice_name} → {rows}\n\n"
+    return msg if has_error else None
+
+def display_message(title, message, title_color="white", box_color="#2C3E50", text_color="white"):
+    """Display a centered message with a 'Next' button."""
+    fig, ax = plt.subplots(figsize=(14, 8))
+    fig.patch.set_facecolor("#1a1a1a")
+    ax.set_facecolor("#262626")
+
+    # Centered text with proper alignment - white background box with dark text
+    ax.text(
+        0.5, 0.5, message,
+        ha="center", va="center",
+        multialignment="center",
+        fontsize=20, fontweight="bold",
+        color="#1a1a1a",  # Dark text color (same as screen background)
+        linespacing=1.6,
+        transform=ax.transAxes,
+        bbox=dict(facecolor="white", edgecolor=title_color, boxstyle="round,pad=1.2", linewidth=2)
+    )
+
+    # Title positioned lower to avoid collision with top border
+    ax.set_title(title, fontsize=28, fontweight="bold", color=title_color, pad=30, y=0.98)
+    ax.axis("off")
+
+    # Adjust layout to match other diagrams with more top margin
+    plt.subplots_adjust(left=0.1, right=0.95, top=0.88, bottom=0.18)
+
+    # Add Next button - SAME position and style as other diagrams
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn_next = Button(
+        ax_button, 'Next →', 
+        color='white', hovercolor='#E5E7EB'
+    )
+    btn_next.label.set_color('black')
+    btn_next.label.set_fontweight('bold')
+
+    # Function to close the screen
+    def next_screen(event):
+        plt.close(fig)
+
+    btn_next.on_clicked(next_screen)
+
+    # Auto-maximize window
+    mng = plt.get_current_fig_manager()
+    try:
+        mng.window.state('zoomed')
+    except Exception:
+        try:
+            mng.window.showMaximized()
+        except:
+            pass
+
     plt.show()
 
 # ==================== MAIN FUNCTION ====================
@@ -94,7 +96,15 @@ def visualize_errors(csv_errors, json_errors):
     if json_errors:
         show_json_errors(json_errors)
         return
-    
-    # CSV errors are warnings - show but continue
-    if csv_errors and any(csv_errors.values()):
-        show_csv_errors(csv_errors)
+
+    msg = format_csv_errors(csv_errors)
+    if msg:
+        display_message(
+            "CSV ERROR REPORT (Row Numbers)",
+            msg,
+            title_color="#00CED1",
+            box_color="#2C3E50",
+            text_color="#E0FFFF"
+        )
+    else:
+        print("✔ No CSV errors found")
