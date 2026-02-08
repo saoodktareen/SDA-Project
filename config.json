@@ -1,6 +1,6 @@
 {
   "region": ["Europe", "North America"],
-  "year": [1960, 1977, 2024, 2000],
+  "year": [1960, 1977, 2005, 2024],
   "country": ["Pakistan", "India", "Australia", "New Zealand", "United Kingdom"],
   "operation": "sum",
   "output": "dashboard"
