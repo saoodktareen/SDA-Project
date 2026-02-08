@@ -425,68 +425,6 @@ def draw_scatter_chart(ax, country_data_list, countries):
 
 # ==================== MAIN VISUALIZATION ====================
 def visualize_countries(df, config):
-<<<<<<< HEAD
-    """Main function - creates all visualizations with Next button"""
-    setup_style()
-    
-    countries = config["country"]
-    operation = config["operation"]
-    
-    # Get data for each country
-    country_data_list = list(map(lambda c: get_country_data(df, c, operation), countries))
-    
-    # Print summary
-    print("\n" + "="*60)
-    print("📊 COUNTRY GDP ANALYSIS".center(60))
-    print("="*60 + "\n")
-    
-    for country, data in zip(countries, country_data_list):
-        print_stats(country, data, operation)
-    
-    print("\n" + "="*60 + "\n")
-    print("✨ Use Next button to navigate between charts\n")
-    
-    # Create figure with consistent size
-    fig, ax = plt.subplots(figsize=(10, 6))
-    plt.subplots_adjust(bottom=0.15)
-    
-    # Chart list
-    charts = [
-        lambda: draw_line_chart(ax, country_data_list, countries),
-        lambda: draw_bar_chart(ax, country_data_list, countries, operation),
-        lambda: draw_area_chart(ax, country_data_list, countries),
-        lambda: draw_scatter_chart(ax, country_data_list, countries)
-    ]
-    
-    # State
-    state = {'current': 0}
-    
-    def next_chart(event):
-        """Show next chart"""
-        state['current'] = (state['current'] + 1) % len(charts)
-        charts[state['current']]()
-        counter_text.set_text(f"Chart {state['current'] + 1} of {len(charts)}")
-        plt.draw()
-    
-    # Draw first chart
-    charts[0]()
-    
-    # Add Next button
-    button_ax = plt.axes([0.44, 0.02, 0.12, 0.06])
-    btn = Button(button_ax, 'Next →', color='#10B981', hovercolor='#059669')
-    btn.label.set_color('white')
-    btn.label.set_fontweight('bold')
-    btn.label.set_fontsize(11)
-    btn.on_clicked(next_chart)
-    
-    # Add counter text
-    counter_text = fig.text(0.5, 0.01, f'Chart 1 of {len(charts)}',
-                           ha='center', fontsize=10, color='#AAAAAA', fontweight='bold')
-    
-    plt.show()
-    
-    print("\n✅ All visualizations complete!\n")
-=======
     """
     Main visualization function using functional programming style.
     Creates multiple professional, centered visualizations.
@@ -523,4 +461,3 @@ def visualize_countries(df, config):
             visualizations
         )
     )
->>>>>>> origin/Saood
