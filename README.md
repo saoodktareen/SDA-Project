@@ -31,11 +31,11 @@ SDA-Project/
 ```
 ## Data Processing Workflow
 ### 1. Load Data
-    - GDP is loaded from a CSV file 
+- GDP is loaded from a CSV file 
 ### 2. Clean Data
-    - Handles missing GDP values
-    - Ensures numeric consistency
-    - Prevents incorrect strings
+- Handles missing GDP values
+- Ensures numeric consistency
+- Prevents incorrect strings
 ### 3. Transform Data
     - Converts CSV file headings into:
         * Country Name
