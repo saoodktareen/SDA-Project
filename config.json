@@ -2,6 +2,6 @@
   "region": ["Asia", "Oceania"],
   "year": [1960, 2000],
   "country": ["Pakistan", "India", "Australia", "New Zealand"],
-  "operation": "average",
+  "operation": "sum",
   "output": "dashboard"
 }
