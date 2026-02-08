@@ -79,3 +79,27 @@ These diagrams show year-wise GDP trends with different colour representations f
     ```text
     pip install -r requirements.txt
     ```
+
+### Running The Project
+```text
+python main.py
+```
+- Please ensure:
+    * config.json values are valid
+    * Required CSV file is present in the same directory
+
+### Key Design Principles
+- Minimal function argument changes
+- Clear seperation of concerns (loading, processing, visualization)
+- JSON-driven logic
+- Beginner-friendly, Functional, and Modular design
+
+### Notes 
+- Visualizations appear sequentially due to Matplotlib behaviour
+- This project is designed for academic evaluation and clarity, not performance optimization
+
+### Authors
+- *Shaheer Saikhani* BCS-4A 24L-3030
+- *Saood Khan Tareen* BCS-4A 24L-0838
+
+- The structure of this project completely supports Phase 2 extensions and dashboard upgradation
