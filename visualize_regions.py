@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 plt.style.use("dark_background")
 import seaborn as sns
-from Process import process
+from process import process
 
 def visualize_regions(df, config):
     years = config["year"]
