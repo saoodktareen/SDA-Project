@@ -14,6 +14,7 @@ def main():
 
     # ---------- LOAD CSV ----------
     df = load_data("gdp_with_continent_filled.csv")
+    
 
     # ---------- CLEAN CSV ----------
     cleaned_df, csv_errors = clean_data(df)
