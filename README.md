@@ -53,10 +53,29 @@ SDA-Project/
 ## Visualization Logic
 ### Region-wise Visualizations
 Generated for each specified year:
-- **Bar Chart* ~ GDP Value region by region 
+- *Bar Chart* ~ GDP Value region by region 
 - *Pie Chart* ~ GDP Percentage region by region
 - *Heatmap* ~ Region vs GDP Value Intensity
 Each specified region is highlighted on each diagram
 
 ### Country-wise Visualizations
 Generated for each specified country:
+- *Line Plot* ~ GDP Trend across all years
+- *Bar Chart* ~ Total/Average GDP Value across all years
+- *Area Chart* ~ Cumulative GDP Trend across all years
+- *Scatter Plot* ~ GDP Trend across all years
+These diagrams show year-wise GDP trends with different colour representations for different countries
+
+### Terminal Output
+- The selected operation results are printed on the terminal
+- Aggregated GDP values are displayed for:
+    * Each selected region (for each specified year)
+    * Each selected country (for all years)
+- Output Headings are self explanatory according to JSON file input
+
+### Dependencies
+- All required libraries are listed in the file named requirements.txt
+- They can be installed using:
+    ```text
+    pip install -r requirements.txt
+    ```
