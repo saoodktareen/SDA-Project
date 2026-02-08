@@ -7,6 +7,20 @@ def visualize_countries(df, config):
 
     print("\n===== COUNTRY RESULTS =====")
 
+    # Strong, distinct colors (cycle automatically if many countries)
+    color_palette = [
+        "#EF4444",  # red
+        "#3B82F6",  # blue
+        "#22C55E",  # green
+        "#F59E0B",  # yellow
+        "#A855F7",  # purple
+        "#EC4899",  # pink
+        "#06B6D4"   # cyan
+    ]
+
+    country_data = {}
+
+    # ---------- DATA + TERMINAL OUTPUT ----------
     for country in countries:
         country_df = df[df["Country Name"] == country]
 
@@ -17,56 +31,66 @@ def visualize_countries(df, config):
             .reset_index()
         )
 
-        # ---------- TERMINAL OUTPUT ----------
+        country_data[country] = yearly_gdp
+
         if operation == "sum":
-            total_gdp = yearly_gdp["GDP"].sum()
-            print(f"{country} → Total GDP (all years): {total_gdp:.2f}")
+            print(f"{country} → Total GDP (all years): {yearly_gdp['GDP'].sum():.2f}")
+        else:
+            print(f"{country} → Average GDP (1940–2024): {yearly_gdp['GDP'].mean():.2f}")
 
-        elif operation == "average":
-            avg_gdp = yearly_gdp["GDP"].mean()
-            print(f"{country} → Average GDP (1940–2024): {avg_gdp:.2f}")
+    # ---------- LINE PLOT (COMBINED) ----------
+    plt.figure(figsize=(10, 6))
 
-        years = yearly_gdp["Year"]
-        gdp = yearly_gdp["GDP"]
+    for i, (country, data) in enumerate(country_data.items()):
+        plt.plot(
+            data["Year"],
+            data["GDP"],
+            marker="o",
+            color=color_palette[i % len(color_palette)],
+            label=country
+        )
 
-        # ---------- LINE ----------
+    plt.title("Annual GDP Trend of Selected Countries")
+    plt.xlabel("Year")
+    plt.ylabel("GDP Value (x10¹²)")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.get_current_fig_manager().window.state('zoomed')
+    plt.show()
+
+    # ---------- SCATTER PLOT (COMBINED) ----------
+    plt.figure(figsize=(10, 6))
+
+    for i, (country, data) in enumerate(country_data.items()):
+        plt.scatter(
+            data["Year"],
+            data["GDP"],
+            color=color_palette[i % len(color_palette)],
+            label=country
+        )
+
+    plt.title("Annual GDP Scatter Plot of Selected Countries")
+    plt.xlabel("Year")
+    plt.ylabel("GDP Value (x10¹²)")
+    plt.legend()
+    plt.tight_layout()
+    plt.get_current_fig_manager().window.state('zoomed')
+    plt.show()
+
+    # ---------- HISTOGRAM (SEPARATE PER COUNTRY) ----------
+    for country, data in country_data.items():
         plt.figure(figsize=(9, 5))
-        plt.plot(years, gdp, marker="o")
-        plt.title(f"Annual GDP Trend of {country}") #{operation.capitalize()} before GDP Trend
-        plt.xlabel("Year")
-        plt.ylabel(f" GDP Value (x10¹²)") #{operation.capitalize()} before GDP Value
-        plt.grid(True)
-        plt.tight_layout()
-        mng = plt.get_current_fig_manager()
-        mng.window.state('zoomed')   # Windows
-        plt.show()
-
-        # ---------- SCATTER ----------
-        plt.figure(figsize=(9, 5))
-        plt.scatter(years, gdp)
-        plt.title(f"Annual GDP Scatter Plot of {country}") #{operation.capitalize()}
-        plt.xlabel("Year")
-        plt.ylabel(f" GDP Value (x10¹²)") #{operation.capitalize()}
-        plt.tight_layout()
-        mng = plt.get_current_fig_manager()
-        mng.window.state('zoomed')   # Windows
-        plt.show()
-
-        # ---------- HISTOGRAM ----------
-        plt.figure(figsize=(8, 5))
         plt.hist(
-            gdp,
+            data["GDP"],
             bins=12,
-            color="#F59E0B",      # bar color
-            edgecolor="white",   # outline for visibility
+            color="#F59E0B",
+            edgecolor="white",
             alpha=0.9
         )
         plt.title(f"Annual GDP Distribution of {country}")
         plt.xlabel("GDP Value (x10¹²)")
         plt.ylabel("Frequency")
         plt.tight_layout()
-
-        mng = plt.get_current_fig_manager()
-        mng.window.state('zoomed')
+        plt.get_current_fig_manager().window.state('zoomed')
         plt.show()
-
