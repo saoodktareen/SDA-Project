@@ -7,30 +7,31 @@ def validate_json(config: dict, clean_df: pd.DataFrame):
 
     # ---------- 1. STRUCTURE CHECK ----------
     if not isinstance(config, dict):
-        errors.append("JSON must be a dictionary")
-        return None, errors
+        return None, ["JSON must be a dictionary"]
 
     missing_keys = required_keys - config.keys()
     extra_keys = config.keys() - required_keys
 
-    if missing_keys:
-        errors.append(f"Missing keys: {list(missing_keys)}")
-
-    if extra_keys:
-        errors.append(f"Extra keys not allowed: {list(extra_keys)}")
+    errors += list(map(lambda k: f"Missing keys: {list(missing_keys)}", missing_keys))
+    errors += list(map(lambda k: f"Extra keys not allowed: {list(extra_keys)}", extra_keys))
 
     # ---------- 2. NULL / EMPTY CHECK ----------
-    for key in required_keys:
-        value = config.get(key)
-
+    def validate_value(item):
+        key, value = item
         if value is None:
-            errors.append(f"'{key}' cannot be null")
-
+            return f"'{key}' cannot be null"
         if isinstance(value, str) and not value.strip():
-            errors.append(f"'{key}' cannot be empty")
-
+            return f"'{key}' cannot be empty"
         if isinstance(value, list) and not value:
-            errors.append(f"'{key}' list cannot be empty")
+            return f"'{key}' list cannot be empty"
+        return None
+
+    errors += list(
+        filter(
+            None,
+            map(validate_value, map(lambda k: (k, config.get(k)), required_keys))
+        )
+    )
 
     # ---------- 3. OPERATION ----------
     operation = str(config.get("operation", "")).lower()
@@ -49,31 +50,30 @@ def validate_json(config: dict, clean_df: pd.DataFrame):
 
     # ---------- 6. COUNTRY ----------
     countries = config.get("country", [])
-    if isinstance(countries, str):
-        countries = [countries]
+    countries = [countries] if isinstance(countries, str) else countries
 
-    invalid_countries = [c for c in countries if c not in df_countries]
+    invalid_countries = list(filter(lambda c: c not in df_countries, countries))
     if invalid_countries:
         errors.append(f"Invalid country names: {invalid_countries}")
 
     # ---------- 7. REGION ----------
     regions = config.get("region", [])
-    if isinstance(regions, str):
-        regions = [regions]
+    regions = [regions] if isinstance(regions, str) else regions
 
-    invalid_regions = [r for r in regions if r not in df_regions]
+    invalid_regions = list(filter(lambda r: r not in df_regions, regions))
     if invalid_regions:
         errors.append(f"Invalid regions: {invalid_regions}")
 
     # ---------- 8. YEAR ----------
     years = config.get("year", [])
-    if isinstance(years, int):
-        years = [years]
+    years = [years] if isinstance(years, int) else years
 
-    invalid_years = [
-        y for y in years
-        if not isinstance(y, int) or y not in df_years or y < 1960 or y > 2024
-    ]
+    invalid_years = list(
+        filter(
+            lambda y: not isinstance(y, int) or y not in df_years or y < 1960 or y > 2024,
+            years
+        )
+    )
 
     if invalid_years:
         errors.append(f"Invalid years: {invalid_years}")
