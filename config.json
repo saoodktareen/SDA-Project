@@ -1,7 +1,7 @@
 {
-  "region": ["Saood"],
-  "year": [1960, 2020, "S"],
-  "country": ["India", "Pakistan", "Shaheer"],
-  "operation": "average",
+  "region": ["Asia", "Oceania"],
+  "year": [1960, 2000],
+  "country": ["Pakistan", "India"],
+  "operation": "sum",
   "output": "dashboard"
 }

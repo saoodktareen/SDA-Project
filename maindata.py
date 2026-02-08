@@ -4,9 +4,9 @@ from load_json import load_json
 from validate_json import validate_json
 from filter_by_region import filter_by_region
 from filter_by_country import filter_by_country
-from Process import process
 from transform import transform_to_long
-
+from visualize_regions import visualize_regions
+from visualize_countries import visualize_countries
 
 def main():
     df = load_data("gdp_with_continent_filled.csv")
@@ -21,15 +21,12 @@ def main():
 
     df_long = transform_to_long(cleaned_df)
 
-    filtered_regions = filter_by_region(df_long, validated_config)
-    print(filtered_regions)
-    print("Total Rows:", len(filtered_regions))
+    # Filter ONLY countries (regions must stay global)
+    filtered_countries = filter_by_country(df_long, validated_config)
 
-    filtered_country = filter_by_country(df_long, validated_config)
-    print(filtered_country)
-
-    process(filtered_country, validated_config)
-
+    # ---- VISUALIZATION ----
+    visualize_regions(df_long, validated_config)
+    visualize_countries(filtered_countries, validated_config)
 
 if __name__ == "__main__":
     main()

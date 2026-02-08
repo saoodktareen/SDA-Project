@@ -1,17 +1,25 @@
-def process(df, config: dict):
-    gdp_series = df["GDP"]
+import pandas as pd
 
-    operations = {
-        "sum": lambda x: x.sum(),
-        "average": lambda x: x.sum() / len(x)
-    }
+def process(df: pd.DataFrame, config: dict, group_by: str) -> pd.DataFrame:
+    """
+    Aggregates GDP based on JSON operation (sum / average)
+    and groups by the specified column.
+    
+    Parameters:
+    df        : filtered DataFrame
+    config    : validated JSON config
+    group_by  : column to group by (e.g., 'Continent', 'Year')
+    """
 
-    op = config.get("operation")
+    operation = config["operation"]
 
-    if op not in operations:
-        raise ValueError("Invalid operation")
+    grouped = df.groupby(group_by)["GDP"]
 
-    result = operations[op](gdp_series)
+    if operation == "sum":
+        result_df = grouped.sum().reset_index(name="GDP")
+    elif operation == "average":
+        result_df = grouped.mean().reset_index(name="GDP")
+    else:
+        raise ValueError("Invalid operation in config")
 
-    print(f"{op.capitalize()} GDP for year {config.get('year')}: {result}")
-    return result
+    return result_df
