@@ -45,19 +45,34 @@ def clean_data(df: pd.DataFrame):
     df = df[~bad_country_rows]
 
     # ---------- GDP LETTER CHECK ----------
-    bad_gdp_rows = df[gdp_cols].astype(str).apply(
-        lambda c: c.str.contains(r"[A-Za-z]")
-    ).any(axis=1)
+    # First convert to numeric 
+    gdp_original = df[gdp_cols].copy()
+    gdp_numeric = df[gdp_cols].apply(pd.to_numeric, errors="coerce")
+    
+    # Find cells that were not originally empty
+    was_not_empty = gdp_original.notna()
+    
+    # Find cells that became NaN after numeric conversion
+    became_nan = gdp_numeric.isna()
+    
+    # Cells with invalid data are those that had values but became NaN
+    has_invalid_data = was_not_empty & became_nan
+    bad_gdp_rows = has_invalid_data.any(axis=1)
 
-    error_log["gdp_alpha"] = (df.index[bad_gdp_rows] + 2).tolist()
+    error_log["corrected_gdp"] = (df.index[bad_gdp_rows] + 2).tolist()
 
-    # Convert GDP columns to numeric
-    df[gdp_cols] = (
-        df[gdp_cols]
-        .apply(pd.to_numeric, errors="coerce")
-        .fillna(0.0)
-        .astype(float)
-    )
+    # Print corrected GDP rows to terminal
+    if bad_gdp_rows.any():
+        print("\n" + "="*60)
+        print("⚠️  GDP CORRECTION REPORT")
+        print("="*60)
+        corrected_rows = (df.index[bad_gdp_rows] + 2).tolist()
+        print(f"The following rows had invalid GDP values and were corrected to 0.00:")
+        print(f"Row Numbers: {corrected_rows}")
+        print("="*60 + "\n")
+
+    # Use the already-converted numeric data
+    df[gdp_cols] = gdp_numeric.fillna(0.0).astype(float)
 
     # ---------- EMPTY GDP ----------
     empty_gdp_rows = (df[gdp_cols] == 0).all(axis=1)
