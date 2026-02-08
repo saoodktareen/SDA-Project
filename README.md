@@ -37,18 +37,18 @@ SDA-Project/
 - Ensures numeric consistency
 - Prevents incorrect strings
 ### 3. Transform Data
-    - Converts CSV file headings into:
-        * Country Name
-        * Continent
-        * Years
-        * GDP Values
+- Converts CSV file headings into:
+    * Country Name
+    * Continent
+    * Years
+    * GDP Values
 ### 4. Filter Data
-    - Countries and Regions are filtered seperately based on JSON configuration file
+- Countries and Regions are filtered seperately based on JSON configuration file
 ### 5. Process Data
-    - Region-wise:
-        * GDP is accumulated according to the operation specified for each region for each specified year
-    - Country-wise:
-        * GDP is accumulated according to the operation specified for each country across all years
+- Region-wise:
+    * GDP is accumulated according to the operation specified for each region for each specified year
+- Country-wise:
+    * GDP is accumulated according to the operation specified for each country across all years
 
 ## Visualization Logic
 ### Region-wise Visualizations
