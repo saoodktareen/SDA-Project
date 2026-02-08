@@ -7,26 +7,40 @@ from filter_by_country import filter_by_country
 from transform import transform_to_long
 from visualize_regions import visualize_regions
 from visualize_countries import visualize_countries
+from visualize_errors import visualize_errors
+
 
 def main():
+
+    # ---------- LOAD CSV ----------
     df = load_data("gdp_with_continent_filled.csv")
-    cleaned_df = clean_data(df)
 
+    # ---------- CLEAN CSV ----------
+    cleaned_df, csv_errors = clean_data(df)
+
+    # ---------- LOAD JSON ----------
     config = load_json("config.json")
-    validated_config = validate_json(config, cleaned_df)
 
-    if validated_config is None:
-        print("Execution stopped due to invalid JSON configuration.")
+    # ---------- VALIDATE JSON ----------
+    validated_config, json_errors = validate_json(config, cleaned_df)
+
+    # ---------- SHOW ERRORS VISUALLY ----------
+    visualize_errors(csv_errors, json_errors)
+
+    # STOP if JSON invalid
+    if json_errors:
         return
 
+    # ---------- TRANSFORM ----------
     df_long = transform_to_long(cleaned_df)
 
-    # Filter ONLY countries (regions must stay global)
+    # ---------- FILTER ----------
     filtered_countries = filter_by_country(df_long, validated_config)
 
-    # ---- VISUALIZATION ----
+    # ---------- VISUALIZE ----------
     visualize_regions(df_long, validated_config)
     visualize_countries(filtered_countries, validated_config)
+
 
 if __name__ == "__main__":
     main()

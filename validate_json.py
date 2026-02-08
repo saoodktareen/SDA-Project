@@ -1,101 +1,93 @@
 import pandas as pd
 
-def validate_json(config: dict, clean_df: pd.DataFrame) -> dict:
+def validate_json(config: dict, clean_df: pd.DataFrame):
+    errors = []
+
     required_keys = {"operation", "output", "country", "region", "year"}
 
     # ---------- 1. STRUCTURE CHECK ----------
     if not isinstance(config, dict):
-        print("Invalid JSON: JSON must be a dictionary")
-        return None
+        errors.append("JSON must be a dictionary")
+        return None, errors
 
     missing_keys = required_keys - config.keys()
     extra_keys = config.keys() - required_keys
 
     if missing_keys:
-        print(f"Invalid JSON: Missing keys -> {list(missing_keys)}")
-        return None
+        errors.append(f"Missing keys: {list(missing_keys)}")
 
     if extra_keys:
-        print(f"Invalid JSON: Extra keys not allowed -> {list(extra_keys)}")
-        return None
+        errors.append(f"Extra keys not allowed: {list(extra_keys)}")
 
     # ---------- 2. NULL / EMPTY CHECK ----------
     for key in required_keys:
         value = config.get(key)
 
         if value is None:
-            print(f"Invalid JSON: '{key}' cannot be null")
-            return None
+            errors.append(f"'{key}' cannot be null")
 
         if isinstance(value, str) and not value.strip():
-            print(f"Invalid JSON: '{key}' cannot be empty")
-            return None
+            errors.append(f"'{key}' cannot be empty")
 
         if isinstance(value, list) and not value:
-            print(f"Invalid JSON: '{key}' list cannot be empty")
-            return None
+            errors.append(f"'{key}' list cannot be empty")
 
-    # ---------- 3. OPERATION VALIDATION ----------
-    operation = config["operation"].strip().lower()
-    valid_operations = {"sum", "average"}
+    # ---------- 3. OPERATION ----------
+    operation = str(config.get("operation", "")).lower()
+    if operation not in {"sum", "average"}:
+        errors.append("Operation must be 'sum' or 'average'")
 
-    if operation not in valid_operations:
-        print("Invalid operation: Allowed values are 'sum' or 'average'")
-        return None
-
-    # ---------- 4. OUTPUT VALIDATION ----------
-    output = config["output"].strip().lower()
-
+    # ---------- 4. OUTPUT ----------
+    output = str(config.get("output", "")).lower()
     if output != "dashboard":
-        print("Invalid output: Only 'dashboard' is supported")
-        return None
+        errors.append("Output must be 'dashboard'")
 
-    # ---------- 5. PREPARE DF REFERENCE SETS ----------
+    # ---------- 5. DF REFERENCES ----------
     df_countries = set(clean_df["Country Name"].str.strip())
     df_regions = set(clean_df["Continent"].str.strip())
     df_years = {int(col) for col in clean_df.columns if col.isdigit()}
 
-    # ---------- 6. COUNTRY VALIDATION ----------
-    countries = config["country"]
+    # ---------- 6. COUNTRY ----------
+    countries = config.get("country", [])
     if isinstance(countries, str):
         countries = [countries]
 
     invalid_countries = [c for c in countries if c not in df_countries]
-
     if invalid_countries:
-        print(f"Invalid country names: {invalid_countries}")
-        return None
+        errors.append(f"Invalid country names: {invalid_countries}")
 
-    # ---------- 7. REGION VALIDATION ----------
-    regions = config["region"]
+    # ---------- 7. REGION ----------
+    regions = config.get("region", [])
     if isinstance(regions, str):
         regions = [regions]
 
     invalid_regions = [r for r in regions if r not in df_regions]
-
     if invalid_regions:
-        print(f"Invalid regions: {invalid_regions}")
-        return None
+        errors.append(f"Invalid regions: {invalid_regions}")
 
-    # ---------- 8. YEAR VALIDATION ----------
-    years = config["year"]
+    # ---------- 8. YEAR ----------
+    years = config.get("year", [])
     if isinstance(years, int):
         years = [years]
 
-    invalid_years = []
-    for y in years:
-        if not isinstance(y, int) or y not in df_years or y < 1960 or y > 2024:
-            invalid_years.append(y)
+    invalid_years = [
+        y for y in years
+        if not isinstance(y, int) or y not in df_years or y < 1960 or y > 2024
+    ]
 
     if invalid_years:
-        print(f"Invalid years: {invalid_years}")
-        return None
+        errors.append(f"Invalid years: {invalid_years}")
 
-    # ---------- 9. NORMALIZED & VALIDATED OUTPUT ----------
-    return {
+    # ---------- 9. RETURN ----------
+    if errors:
+        return None, errors
+
+    validated = {
         "operation": operation,
         "output": output,
         "country": countries,
         "region": regions,
         "year": years
     }
+
+    return validated, []
