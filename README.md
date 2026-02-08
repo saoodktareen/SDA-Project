@@ -53,9 +53,9 @@ SDA-Project/
 ## Visualization Logic
 ### Region-wise Visualizations
 Generated for each specified year:
-- Bar Chart ~ GDP Value region by region 
-- Pie Chart ~ GDP Percentage region by region
-- Heatmap ~ Region vs GDP Value Intensity
+- **Bar Chart* ~ GDP Value region by region 
+- *Pie Chart* ~ GDP Percentage region by region
+- *Heatmap* ~ Region vs GDP Value Intensity
 Each specified region is highlighted on each diagram
 
 ### Country-wise Visualizations
