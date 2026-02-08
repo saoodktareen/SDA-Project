@@ -3,6 +3,7 @@ import seaborn as sns
 import numpy as np
 from functools import reduce
 from itertools import cycle
+from matplotlib.widgets import Button
 
 # ==================== PROFESSIONAL COLOR SCHEME ====================
 # Sophisticated, business-friendly palette inspired by modern dashboards
@@ -129,6 +130,14 @@ def create_line_chart(country_data):
     
     ax.grid(True, alpha=0.3, linestyle="--", linewidth=0.8)
     plt.tight_layout()
+    
+    # Add Next button
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
+    btn.label.set_fontweight('bold')
+    btn.on_clicked(lambda event: plt.close())
+    
     maximize_window()
     plt.show()
 
@@ -183,6 +192,14 @@ def create_bar_comparison(country_data, operation):
     ax.grid(axis='y', alpha=0.3, linestyle="--", linewidth=0.8)
     
     plt.tight_layout()
+    
+    # Add Next button
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
+    btn.label.set_fontweight('bold')
+    btn.on_clicked(lambda event: plt.close())
+    
     maximize_window()
     plt.show()
 
@@ -224,6 +241,14 @@ def create_area_chart(country_data):
     
     ax.grid(True, alpha=0.3, linestyle="--", linewidth=0.8)
     plt.tight_layout()
+    
+    # Add Next button
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
+    btn.label.set_fontweight('bold')
+    btn.on_clicked(lambda event: plt.close())
+    
     maximize_window()
     plt.show()
 
@@ -273,6 +298,14 @@ def create_scatter_with_trend(country_data):
     
     ax.grid(True, alpha=0.3, linestyle="--", linewidth=0.8)
     plt.tight_layout()
+    
+    # Add Next button
+    ax_button = plt.axes([0.02, 0.02, 0.1, 0.05])
+    btn = Button(ax_button, 'Next →', color='white', hovercolor='#E5E7EB')
+    btn.label.set_color('black')
+    btn.label.set_fontweight('bold')
+    btn.on_clicked(lambda event: plt.close())
+    
     maximize_window()
     plt.show()
 
