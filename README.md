@@ -102,4 +102,5 @@ python main.py
 - **Shaheer Saikhani** *BCS-4A* 24L-3030
 - **Saood Khan Tareen** *BCS-4A* 24L-0838
 
-- The structure of this project completely supports Phase 2 extensions and dashboard upgradation
+
+*The structure of this project completely supports Phase 2 extensions and dashboard upgradation*
