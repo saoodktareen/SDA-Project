@@ -1,7 +1,11 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+<<<<<<< HEAD
 from Process import process
 from matplotlib.widgets import Button
+=======
+from process import process
+>>>>>>> origin/Saood
 
 # ==================== COLORS ====================
 COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6", "#EF4444", "#06B6D4", "#EC4899", "#14B8A6"]

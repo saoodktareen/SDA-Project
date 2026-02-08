@@ -1,9 +1,9 @@
-# GDP Analysis and Visualization Dashboard
+# **GDP Analysis and Visualization Dashboard**
 This Software Design and Analysis Project is a Python-based data analysis and visualization system that processes World Bank GDP Data and generates multiple data representation visuals for both region-wise and country-wise data selection. The entire workflow is derived from a JSON configuration file which makes the system flexible and reusable.
 
 ## Project Objectives
 - Load, Clean and FIlter GDP Data according to JSON file
-- Transform GDP csv file data into analysis-prepared data
+- Transform GDP CSV file data into analysis-prepared data
 - Apply statistical operations according to user preferences
 - Visualize GDP Trends
     * Region-wise Representation (Bar Graph, Pie Chart, Heatmap)
@@ -29,3 +29,78 @@ SDA-Project/
 ├── requirements.txt
 └── README.md
 ```
+## Data Processing Workflow
+### 1. Load Data
+- GDP is loaded from a CSV file 
+### 2. Clean Data
+- Handles missing GDP values
+- Ensures numeric consistency
+- Prevents incorrect strings
+### 3. Transform Data
+- Converts CSV file headings into:
+    * Country Name
+    * Continent
+    * Years
+    * GDP Values
+### 4. Filter Data
+- Countries and Regions are filtered seperately based on JSON configuration file
+### 5. Process Data
+- Region-wise:
+    * GDP is accumulated according to the operation specified for each region for each specified year
+- Country-wise:
+    * GDP is accumulated according to the operation specified for each country across all years
+
+## Visualization Logic
+### Region-wise Visualizations
+Generated for each specified year:
+- *Bar Chart* ~ GDP Value region by region 
+- *Pie Chart* ~ GDP Percentage region by region
+- *Heatmap* ~ Region vs GDP Value Intensity
+Each specified region is highlighted on each diagram
+
+### Country-wise Visualizations
+Generated for each specified country:
+- *Line Plot* ~ GDP Trend across all years
+- *Bar Chart* ~ Total/Average GDP Value across all years
+- *Area Chart* ~ Cumulative GDP Trend across all years
+- *Scatter Plot* ~ GDP Trend across all years
+These diagrams show year-wise GDP trends with different colour representations for different countries
+
+## Terminal Output
+- The selected operation results are printed on the terminal
+- Aggregated GDP values are displayed for:
+    * Each selected region (for each specified year)
+    * Each selected country (for all years)
+- Output Headings are self explanatory according to JSON file input
+
+## Dependencies
+- All required libraries are listed in the file named requirements.txt
+- They can be installed using:
+    ```text
+    pip install -r requirements.txt
+    ```
+
+## Running The Project
+```text
+python main.py
+```
+- Please ensure:
+    * config.json values are valid
+    * Required CSV file is present in the same directory
+
+## Key Design Principles
+- Minimal function argument changes
+- Clear seperation of concerns (loading, processing, visualization)
+- JSON-driven logic
+- Beginner-friendly, Functional, and Modular design
+
+## Notes 
+- Visualizations appear sequentially due to Matplotlib behaviour
+- This project is designed for academic evaluation and clarity, not performance optimization
+
+## Authors
+- **Shaheer Saikhani** *BCS-4A* 24L-3030
+- **Saood Khan Tareen** *BCS-4A* 24L-0838
+
+
+*The structure of this project completely supports Phase 2 extensions and dashboard upgradation*
